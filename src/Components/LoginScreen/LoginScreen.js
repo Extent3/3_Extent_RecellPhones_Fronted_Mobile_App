@@ -1,0 +1,234 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  ToastAndroid,
+  StatusBar,
+} from 'react-native';
+
+import LinearGradient from 'react-native-linear-gradient';
+import { apiCall, Spinner } from '../Util/AxiosUtil';
+import { API_URLS } from '../Util/AppConst';
+import InputComponent from '../CustomComponent/InputComponent';
+
+const logoImage = require('../../Assets/ExtentLogo.png');
+
+export default function LoginScreen({ navigation }) {
+  const [phoneNumber, setphoneNumber] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleLoginResponse = (response) => {
+    setLoading(false);
+
+    if (response?.status === 200) {
+      const isNewUser = response?.data?.is_new ?? false;
+
+      ToastAndroid.show(
+        'OTP Sent Successfully',
+        ToastAndroid.SHORT
+      );
+
+      navigation.navigate('OTP', { phoneNumber, isNewUser, });
+      return;
+    }
+
+    const errorMsg =
+      response?.data?.error || 'Failed to send OTP';
+
+    ToastAndroid.show(
+      errorMsg,
+      ToastAndroid.SHORT
+    );
+  };
+
+  const handleLogin = () => {
+    if (phoneNumber.length !== 10) {
+      setError('Please enter valid 10-digit mobile number');
+      return;
+    }
+    setError('');
+    setLoading(true);
+    apiCall({
+      method: "POST",
+      url: API_URLS.SEND_OTP,
+      data: { contact_number: phoneNumber, },
+      callback: handleLoginResponse
+    });
+  };
+
+  return (
+
+    <LinearGradient
+      colors={['#0D8A4F', '#0a6d3e']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
+      <StatusBar
+        translucent={true}
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
+
+      <SafeAreaView style={styles.flex}>
+        {loading && <Spinner />}
+
+        {/* TOP LOGO SECTION */}
+        <View style={styles.logoSection}>
+          <View style={styles.logoCircle}>
+            <Image source={logoImage} style={styles.logoImage} />
+          </View>
+
+          <Text style={styles.title}>3_EXTENT</Text>
+          <Text style={styles.subtitle}>Buy & Sell Used Devices</Text>
+          <Text style={styles.description}>
+            Get best value for your old devices with instant price quotes
+          </Text>
+        </View>
+
+        {/* FORM SECTION */}
+        <View style={styles.formSection}>
+          <Text style={styles.welcomeText}>Welcome Back!</Text>
+          <Text style={styles.signInText}>Sign in to continue</Text>
+
+
+          <InputComponent
+            label="Phone Number"
+            value={phoneNumber}
+            onChangeText={(text) => {
+              setphoneNumber(text);
+              setError('');
+            }}
+            placeholder="Enter mobile number"
+            keyboardType="phone-pad"
+            maxLength={10}
+            prefix="+91"
+            error={error}
+          />
+
+          {/* LOGIN BUTTON */}
+          <TouchableOpacity
+            style={[
+              styles.loginButton,
+              phoneNumber.length === 0 && { opacity: 0.5 }
+            ]}
+            onPress={handleLogin}
+            disabled={phoneNumber.length === 0}
+          >
+            <Text style={styles.loginButtonText}>Continue</Text>
+          </TouchableOpacity>
+          {/* TERMS */}
+          <Text style={styles.termsText}>
+            By continuing you agree to Terms & Privacy Policy
+          </Text>
+        </View>
+
+      </SafeAreaView>
+    </LinearGradient>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  flex: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+
+  /* LOGO SECTION */
+  logoSection: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+
+  logoCircle: {
+    width: 120,
+    height: 120,
+    backgroundColor: '#fff',
+    borderRadius: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+
+  logoImage: {
+    width: 75,
+    height: 75,
+    resizeMode: 'contain',
+  },
+
+  title: {
+    fontSize: 34,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+
+  subtitle: {
+    fontSize: 16,
+    color: '#fff',
+    marginTop: 6,
+  },
+
+  description: {
+    fontSize: 13,
+    color: '#E5E7EB',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+
+  /* FORM SECTION */
+  formSection: {
+    backgroundColor: '#fff',
+    padding: 24,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+
+  welcomeText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#111827',
+  },
+
+  signInText: {
+    color: '#6B7280',
+    marginBottom: 20,
+  },
+
+  loginButton: {
+    marginTop: 20,
+    backgroundColor: '#0D8A4F',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+
+  loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+
+  signupText: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: '#6B7280',
+  },
+
+  termsText: {
+    marginTop: 15,
+    fontSize: 11,
+    color: '#9CA3AF',
+    textAlign: 'center',
+  },
+});
