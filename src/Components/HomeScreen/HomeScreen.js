@@ -14,7 +14,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Smartphone, TrendingUp, Zap, UserCircle } from 'lucide-react-native';
 
 
-const logoImage = require('../../Assets/ExtentLogo.png');
+const logoImage = require('../../Assets/ResalePhoneLogo.png');
 const { width } = Dimensions.get('window');
 
 import {
@@ -63,108 +63,6 @@ const BRAND_LOGOS = {
   Asus: AsusLogo,
   Huawei: HuaweiLogo,
 };
-// const brands = [
-//   {
-//     name: 'Apple',
-//     Logo: AppleLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Samsung',
-//     Logo: SamsungLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'OnePlus',
-//     Logo: OnePlusLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Xiaomi',
-//     Logo: XiaomiLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Vivo',
-//     Logo: VivoLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Oppo',
-//     Logo: OppoLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Realme',
-//     Logo: RealmeLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Google',
-//     Logo: GoogleLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Nokia',
-//     Logo: NokiaLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Motorola',
-//     Logo: MotorolaLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'iQOO',
-//     Logo: IQOOLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Nothing',
-//     Logo: NothingLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Lenovo',
-//     Logo: LenovoLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Honor',
-//     Logo: HonorLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'POCO',
-//     Logo: PocoLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Infinix',
-//     Logo: InfinixLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Tecno',
-//     Logo: TecnoLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'LG',
-//     Logo: LGLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Asus',
-//     Logo: AsusLogo,
-//     screen: 'model-selection',
-//   },
-//   {
-//     name: 'Huawei',
-//     Logo: HuaweiLogo,
-//     screen: 'model-selection',
-//   },
-// ];
 
 
 const features = [
@@ -267,7 +165,10 @@ export default function HomeScreen({ navigation }) {
             </View>
 
             {/* Right Side */}
-            <TouchableOpacity style={styles.avatarCircle}>
+            <TouchableOpacity 
+            style={styles.avatarCircle}
+             onPress={() => navigation.navigate('Profile')}
+            >
               <UserCircle size={28} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
@@ -280,7 +181,15 @@ export default function HomeScreen({ navigation }) {
             {features.map((feature) => {
               const Icon = feature.icon;
               return (
-                <TouchableOpacity key={feature.title} style={styles.quickActionButton}>
+                <TouchableOpacity
+                  key={feature.title}
+                  style={styles.quickActionButton}
+                  onPress={() => {
+                    if (feature.title === 'Sell Device') {
+                      navigation.navigate('Brand');
+                    }
+                  }}
+                >
                   <View style={styles.quickActionIconWrap}>
                     <Icon size={20} color="#0D8A4F" />
                   </View>
@@ -345,25 +254,6 @@ export default function HomeScreen({ navigation }) {
           </ScrollView>
         </View>
 
-        {/* Popular Brands */}
-        {/* <View style={[styles.section, { paddingBottom: 24 }]}>
-          <Text style={styles.sectionTitle}>Popular Brands</Text>
-          <View style={styles.brandsCard}>
-            <View style={styles.brandsGrid}>
-              {brands.map((brand) => (
-                <TouchableOpacity key={brand.name} style={styles.brandItem} onPress={() =>
-                  navigation.replace('Brand')
-                }>
-                  <View style={styles.brandIconWrap}>
-                    <Text style={styles.brandIconText}>{brand.icon}</Text>
-                  </View>
-                  <Text style={styles.brandName}>{brand.name}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-        </View> */}
 
         <View style={[styles.section, { paddingBottom: 24 }]}>
           <View style={styles.sectionHeaderRow}>

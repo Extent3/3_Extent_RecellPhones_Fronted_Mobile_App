@@ -8,6 +8,7 @@ import {
     StyleSheet,
 } from "react-native";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DefectCard from "../CustomComponent/DefectCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { apiCall, Spinner } from "../Util/AxiosUtil";
@@ -15,6 +16,7 @@ import { API_URLS } from "../Util/AppConst";
 import { DEFECT_ICONS, DEFECT_DATA } from "../DefectScreen/DefectData";
 
 export default function DefectScreen({ navigation, route }) {
+    const insets = useSafeAreaInsets();
     const [loading, setLoading] = useState(false);
     const [defects, setDefects] = useState([]);
     const [selectedDefects, setSelectedDefects] = useState([]);
@@ -247,8 +249,8 @@ export default function DefectScreen({ navigation, route }) {
                 {/* Header */}
                 <View style={styles.header}>
                     <View style={styles.headerRow}>
-                       
-                        <TouchableOpacity onPress={() => navigation.goBack()}  style={styles.backButton}>
+
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                             <ChevronLeft size={28} color="#000" />
                         </TouchableOpacity>
 
@@ -285,7 +287,15 @@ export default function DefectScreen({ navigation, route }) {
                 </ScrollView>
 
                 {/* Continue */}
-                <View style={styles.continueWrap}>
+                <View
+                    // style={styles.continueWrap}
+                    style={[
+                        styles.continueWrap,
+                        {
+                            paddingBottom: insets.bottom + 16,
+                        },
+                    ]}
+                >
                     <TouchableOpacity
                         style={styles.continueButton}
                         onPress={handleContinue}

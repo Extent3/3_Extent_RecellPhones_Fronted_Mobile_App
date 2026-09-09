@@ -1,6 +1,6 @@
-// const BASE_URL = "https://3-extent-sales-app-backend.vercel.app/api";
+const BASE_URL = "https://3-extent-sales-app-backend.vercel.app/api";
 //  const BASE_URL = "http://localhost:5000/api";
-const BASE_URL = "http://10.68.55.148:5000/api";
+// const BASE_URL = "http://10.68.55.148:5000/api";
 
 export const API_URLS = {
     BRANDS: `${BASE_URL}/brands`,

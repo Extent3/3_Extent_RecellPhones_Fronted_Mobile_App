@@ -14,9 +14,12 @@ import {
 } from 'lucide-react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 export default function BottomNav({ currentScreen }) {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
 
   const navItems = [
     {
@@ -42,7 +45,13 @@ export default function BottomNav({ currentScreen }) {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[
+      styles.container,
+      {
+        height: 75 + insets.bottom,
+        paddingBottom: insets.bottom,
+      },
+    ]}>
       {navItems.map((item) => {
         const active = currentScreen === item.screen;
         const Icon = item.icon;
@@ -83,11 +92,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-
-    height: 75,
-
     backgroundColor: '#FFFFFF',
-
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
@@ -108,6 +113,7 @@ const styles = StyleSheet.create({
 
   item: {
     flex: 1,
+    height: 75,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { apiCall, Spinner } from "../Util/AxiosUtil";
 import { API_URLS } from "../Util/AppConst";
 
@@ -17,6 +18,7 @@ export default function WarrantyScreen({ navigation, route }) {
     const [selectedWarranty, setSelectedWarranty] = useState(null);
     const [selected, setSelected] = useState(false);
     const [loading, setLoading] = useState(false);
+    const insets = useSafeAreaInsets();
     useEffect(() => {
         getWarranty();
     }, []);
@@ -105,7 +107,13 @@ export default function WarrantyScreen({ navigation, route }) {
             {/* ── Question ── */}
             <ScrollView
                 style={styles.body}
-                contentContainerStyle={styles.bodyContent}
+                // contentContainerStyle={styles.bodyContent}
+                contentContainerStyle={[
+                    styles.bodyContent,
+                    {
+                        paddingBottom: 150 + insets.bottom,
+                    },
+                ]}
             >
                 <Text style={styles.question}>What is your mobile age?</Text>
                 <Text style={styles.subQuestion}>
@@ -163,7 +171,13 @@ export default function WarrantyScreen({ navigation, route }) {
             </ScrollView>
 
             {/* ── Continue Button ── */}
-            <View style={styles.footer}>
+            <View style={[
+                    styles.footer,
+                    {
+                        paddingBottom: 24 + insets.bottom,
+                    },
+                ]}
+            >
                 <TouchableOpacity
                     onPress={handleContinue}
                     disabled={!selected}
@@ -263,7 +277,7 @@ const styles = StyleSheet.create({
         borderColor: "#E5E7EB",
         backgroundColor: "#FFFFFF",
     },
-    
+
     optionCardSelected: {
         borderColor: "#0D8A4F",
         backgroundColor: "#FFFFFF",

@@ -12,7 +12,7 @@ import {
 import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const logoImage = require('../../Assets/ExtentLogo.png');
+const logoImage = require('../../Assets/recell.png');
 
 export default function OTPScreen({ navigation, route }) {
   const { phoneNumber, } = route.params;
@@ -91,79 +91,11 @@ export default function OTPScreen({ navigation, route }) {
         user?.lastName?.trim() &&
         user?.address?.length > 0;
 
-      // // PROFILE CHECK
-      // const hasFirstName =
-      //   typeof user?.firstName ===
-      //   'string' &&
-      //   user.firstName.trim() !== '';
-
-      // const hasLastName =
-      //   typeof user?.lastName ===
-      //   'string' &&
-      //   user.lastName.trim() !== '';
-
-      // const hasAddress =
-      //   Array.isArray(user?.address) &&
-      //   user.address.length > 0;
-
-      // const isProfileCompleted =
-      //   hasFirstName &&
-      //   hasLastName &&
-      //   hasAddress;
-
-      // console.log(
-      //   'HAS FIRST NAME =>',
-      //   hasFirstName
-      // );
-
-      // console.log(
-      //   'HAS LAST NAME =>',
-      //   hasLastName
-      // );
-
-      // console.log(
-      //   'HAS ADDRESS =>',
-      //   hasAddress
-      // );
-
-      // console.log(
-      //   'PROFILE COMPLETED =>',
-      //   isProfileCompleted
-      // );
-
-      // =========================
-      // SUCCESS MESSAGE
-      // =========================
-
       ToastAndroid.show(
         'Login Successfully',
         ToastAndroid.SHORT
       );
 
-      // if (isNewUser === true) {
-      //   navigation.replace(
-      //     'PersonalDetails',
-      //     {
-      //       phoneNumber: phoneNumber,
-      //       userId: user?._id,
-      //     }
-      //   );
-
-      // } else if (!isProfileCompleted) {
-      //   navigation.replace(
-      //     'PersonalDetails',
-      //     {
-      //       phoneNumber: phoneNumber,
-      //       userId: user?._id,
-      //     }
-      //   );
-
-      // } else {
-
-      //   navigation.replace(
-      //     'Home'
-      //   );
-      // }
       if (!isProfileCompleted) {
         navigation.replace('PersonalDetails', {
           phoneNumber,
@@ -205,10 +137,40 @@ export default function OTPScreen({ navigation, route }) {
     });
   };
 
+  const resendOtpCallback = (response) => {
+    setLoading(false);
+
+    if (response?.status === 200) {
+      ToastAndroid.show(
+        'OTP sent successfully',
+        ToastAndroid.SHORT
+      );
+
+      setOtp(['', '', '', '', '', '']);
+
+      setTimer(30);
+
+      setTimeout(() => {
+        inputRefs.current[0]?.focus();
+      }, 100);
+    } else {
+      setLoading(false);
+
+      const errorMsg =
+        response?.data?.message || 'Failed to send OTP';
+
+      ToastAndroid.show(
+        errorMsg,
+        ToastAndroid.SHORT
+      );
+    }
+  };
+
   const handleResend = () => {
-    if (timer > 0) {
+    if (timer > 0 || loading) {
       return;
     }
+
     setLoading(true);
 
     apiCall({
@@ -219,33 +181,7 @@ export default function OTPScreen({ navigation, route }) {
       },
       callback: resendOtpCallback,
     });
-
-    const resendOtpCallback = (response) => {
-      setLoading(false);
-      if (response?.status === 200) {
-        ToastAndroid.show(
-          'OTP sent successfully',
-          ToastAndroid.SHORT
-        );
-
-        setOtp(['', '', '', '', '', '']);
-        setTimer(60);
-        inputRefs[0]?.focus();
-
-      } else {
-        setTimer(0);
-
-        const errorMsg =
-          response?.data?.message || 'Failed to send OTP';
-
-        ToastAndroid.show(
-          errorMsg,
-          ToastAndroid.SHORT
-        );
-      }
-    };
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -326,7 +262,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0D8A4F',
   },
 
- 
+
   header: {
     paddingHorizontal: 20,
     paddingTop: 45,
@@ -353,8 +289,8 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 55,
-    height: 55,
+    width: 85,
+    height: 85,
     resizeMode: 'contain',
   },
 

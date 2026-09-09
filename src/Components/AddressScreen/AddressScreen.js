@@ -16,14 +16,16 @@ import {
 import { ChevronLeft } from "lucide-react-native";
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { API_URLS } from "../Util/AppConst";
 import { apiCall, Spinner } from "../Util/AxiosUtil";
 import InputComponent from "../CustomComponent/InputComponent";
 
-const logoImage = require("../../Assets/ExtentLogo.png");
+const logoImage = require("../../Assets/ResalePhoneLogo.png");
 
 export default function AddressScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [formData, setFormData] = useState({
     houseNo: "",
     address: "",
@@ -399,7 +401,19 @@ export default function AddressScreen({ navigation }) {
 
         <ScrollView
           style={styles.formContainer}
-          contentContainerStyle={styles.formContent}
+          // contentContainerStyle={styles.formContent}
+          // contentContainerStyle={[
+          //   styles.formContent,
+          //   {
+          //     paddingBottom: insets.bottom,
+          //   },
+          // ]}
+          contentContainerStyle={[
+            styles.formContent,
+            {
+              paddingBottom: insets.bottom,
+            },
+          ]}
           keyboardShouldPersistTaps="handled"
         >
 
@@ -513,7 +527,7 @@ export default function AddressScreen({ navigation }) {
                       </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       onPress={
                         handleContinueWithSelectedAddress
                       }
@@ -527,7 +541,7 @@ export default function AddressScreen({ navigation }) {
                       >
                         Continue
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </>
                 )}
 
@@ -704,6 +718,26 @@ export default function AddressScreen({ navigation }) {
             </>
           )}
         </ScrollView>
+        {!showNewAddressForm && existingAddresses.length > 0 && (
+          <View
+            style={[
+              styles.bottomButtonContainer,
+              {
+                paddingBottom: insets.bottom + 16,
+              },
+            ]}
+          >
+            <TouchableOpacity
+              onPress={handleContinueWithSelectedAddress}
+              style={styles.submitButton}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.submitButtonText}>
+                Continue
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </KeyboardAvoidingView>
     </LinearGradient>
   );
@@ -778,6 +812,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     maxWidth: 300,
   },
+  bottomButtonContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "#FFFFFF",
+
+    paddingHorizontal: 24,
+    paddingTop: 12,
+
+    borderTopWidth: 1,
+    borderTopColor: "#F3F4F6",
+
+    elevation: 10,
+  },
 
   formContainer: {
     flex: 1,
@@ -797,7 +846,7 @@ const styles = StyleSheet.create({
   formContent: {
     paddingHorizontal: 24,
     paddingTop: 24,
-    paddingBottom: 30,
+    // paddingBottom: 30,
   },
 
   sectionTitle: {
@@ -980,7 +1029,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 24,
+    // marginTop: 24,
     elevation: 4,
   },
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   User,
   Bell,
@@ -20,6 +21,26 @@ import {
 import BottomNav from '../BottomNav/BottomNav'
 
 export default function ProfileScreen({ navigation }) {
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    AsyncStorage.getItem('user').then(data => {
+      if (data) {
+        setUser(JSON.parse(data));
+      }
+    });
+  }, []);
+
+  const handleLogout = () => {
+    AsyncStorage.removeItem('user');
+    AsyncStorage.removeItem('loggedinPhoneNumber');
+    AsyncStorage.removeItem('details');
+    AsyncStorage.removeItem('selectedvariant');
+    AsyncStorage.removeItem('finalPrice');
+    AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem('selectedAddress');
+
+    navigation.replace('Login');
+  };
   const menuItems = [
     { icon: Settings, label: 'Account Settings', color: '#0D8A4F' },
     { icon: Bell, label: 'Notifications', color: '#3B82F6' },
@@ -55,9 +76,20 @@ export default function ProfileScreen({ navigation }) {
                 <User size={32} color="#0D8A4F" />
               </View>
               <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>Aman Singh</Text>
-                <Text style={styles.profileEmail}>aman@example.com</Text>
-                <Text style={styles.profilePhone}>+91 9876543210</Text>
+
+                <Text style={styles.profileName}>
+                  {user.name}
+                </Text>
+
+                {/* Email */}
+                <Text style={styles.profileEmail}>
+                  {user.email_id}
+                </Text>
+
+                {/* Phone */}
+                <Text style={styles.profilePhone}>
+                  {`+91 ${user.contact_number}`}
+                </Text>
               </View>
             </View>
           </View>
@@ -119,7 +151,7 @@ export default function ProfileScreen({ navigation }) {
 
         {/* Logout Button */}
         <View style={styles.logoutWrapper}>
-          <TouchableOpacity style={styles.logoutButton} activeOpacity={0.7}>
+          <TouchableOpacity style={styles.logoutButton} activeOpacity={0.7} onPress={handleLogout}>
             <LogOut size={20} color="#DC2626" />
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
@@ -134,7 +166,7 @@ export default function ProfileScreen({ navigation }) {
         </View>
       </ScrollView>
 
-      <BottomNav currentScreen="Profile"  />
+      <BottomNav currentScreen="Profile" />
     </View>
   );
 }

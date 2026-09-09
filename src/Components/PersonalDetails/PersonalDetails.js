@@ -15,7 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
 import InputComponent from "../CustomComponent/InputComponent";
-const logoImage = require('../../Assets/ExtentLogo.png');
+const logoImage = require('../../Assets/ResalePhoneLogo.png');
 
 export default function PersonalDetails({ navigation, route }) {
     const { userId } = route?.params;

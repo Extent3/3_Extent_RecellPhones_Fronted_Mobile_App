@@ -9,12 +9,14 @@ import {
 } from 'react-native';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSafeAreaInsets, } from 'react-native-safe-area-context';
 import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
 
 
 
 export default function EnquiryQuestion({ navigation, route }) {
+  const insets = useSafeAreaInsets();
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [answers, setAnswers] = useState({});
@@ -274,7 +276,16 @@ export default function EnquiryQuestion({ navigation, route }) {
 
       {/* Continue */}
 
-      <View style={styles.bottomContainer}>
+      <View
+        // style={styles.bottomContainer}
+      style={[
+        styles.bottomContainer,
+        {
+          paddingBottom: insets.bottom + 16,
+        },
+      ]}
+
+      >
         <TouchableOpacity
           style={styles.continueButton}
           onPress={handleContinue}
@@ -303,7 +314,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingVertical: 18,
-    paddingTop:40,
+    paddingTop: 40,
     elevation: 2,
   },
 
@@ -410,9 +421,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: '#fff',
     padding: 16,
-    paddingBottom:20
+    paddingBottom: 20
   },
-  
+
 
   continueButton: {
     backgroundColor: '#0D8A4F',

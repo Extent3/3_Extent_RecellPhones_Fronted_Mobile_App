@@ -7,20 +7,22 @@ import {
   StyleSheet,
   SafeAreaView,
   ToastAndroid,
-  StatusBar,
+   StatusBar,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
 import InputComponent from '../CustomComponent/InputComponent';
 
-const logoImage = require('../../Assets/ExtentLogo.png');
+const logoImage = require('../../Assets/recell.png');
 
 export default function LoginScreen({ navigation }) {
   const [phoneNumber, setphoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const insets = useSafeAreaInsets();
 
   const handleLoginResponse = (response) => {
     setLoading(false);
@@ -92,7 +94,22 @@ export default function LoginScreen({ navigation }) {
         </View>
 
         {/* FORM SECTION */}
-        <View style={styles.formSection}>
+        <View
+          // style={styles.formSection}
+          //   style={[
+          //     styles.formSection,
+          //     {
+          //       paddingBottom: 24 + insets.bottom,
+          //     },
+          //   ]}
+          // >
+          style={[
+            styles.formSection,
+            {
+              paddingBottom: insets.bottom + 24,
+            },
+          ]}
+        >
           <Text style={styles.welcomeText}>Welcome Back!</Text>
           <Text style={styles.signInText}>Sign in to continue</Text>
 
@@ -105,7 +122,8 @@ export default function LoginScreen({ navigation }) {
               setError('');
             }}
             placeholder="Enter mobile number"
-            keyboardType="phone-pad"
+            // keyboardType="phone-pad"
+            keyboardType="numeric"
             maxLength={10}
             prefix="+91"
             error={error}
@@ -129,7 +147,7 @@ export default function LoginScreen({ navigation }) {
         </View>
 
       </SafeAreaView>
-    </LinearGradient>
+    </LinearGradient >
   );
 }
 
@@ -162,8 +180,8 @@ const styles = StyleSheet.create({
   },
 
   logoImage: {
-    width: 75,
-    height: 75,
+    width: 110,
+    height: 110,
     resizeMode: 'contain',
   },
 
@@ -189,7 +207,10 @@ const styles = StyleSheet.create({
   /* FORM SECTION */
   formSection: {
     backgroundColor: '#fff',
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 35,
+    // padding: 24,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
   },

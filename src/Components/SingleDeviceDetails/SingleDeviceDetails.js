@@ -4,8 +4,12 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, SafeAreaView, Sta
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { API_URLS } from '../Util/AppConst';
 import { apiCall, Spinner } from '../Util/AxiosUtil';
+import {
+    useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 export default function SingleDeviceDetails({ navigation, route }) {
+    const insets = useSafeAreaInsets();
     const { model, modelId, brand, } = route.params || {};
 
     const [modelData, setModelData] = useState(null);
@@ -222,7 +226,7 @@ export default function SingleDeviceDetails({ navigation, route }) {
                             <Image
                                 source={{
                                     uri:
-                                        modelData?.image 
+                                        modelData?.image
                                 }}
                                 style={styles.deviceImage}
                                 resizeMode="contain"
@@ -368,7 +372,23 @@ export default function SingleDeviceDetails({ navigation, route }) {
 
             {
                 !showFinalPrice && (
-                    <View style={styles.ctaWrap}>
+                    <View
+                        // style={[
+                        //     styles.ctaWrap,
+                        //     {
+                        //         paddingBottom: Math.max(insets.bottom, 16) + 12,
+                        //     },
+                        // ]}
+                        style={[
+                            styles.ctaWrap,
+                            {
+                                paddingBottom: insets.bottom + 16,
+                            },
+                        ]}
+
+
+                    // style={styles.ctaWrap}
+                    >
                         <TouchableOpacity
                             disabled={!gotExactValue}
                             onPress={handleGetExactValue}
@@ -394,7 +414,7 @@ export default function SingleDeviceDetails({ navigation, route }) {
                     </View>
                 )
             }
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 
@@ -440,7 +460,7 @@ const styles = StyleSheet.create({
     },
 
     scrollContent: {
-        paddingBottom: 24,
+        paddingBottom: 120,
     },
 
     card: {
@@ -576,7 +596,7 @@ const styles = StyleSheet.create({
     ctaWrap: {
         paddingHorizontal: 20,
         paddingTop: 12,
-        paddingBottom: 16,
+        // paddingBottom: 16,
         backgroundColor: '#FFFFFF',
         borderTopWidth: 1,
         borderTopColor: '#F3F4F6',
