@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   Image,
@@ -21,8 +20,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { API_URLS } from "../Util/AppConst";
 import { apiCall, Spinner } from "../Util/AxiosUtil";
 import InputComponent from "../CustomComponent/InputComponent";
+const recellBackIcon = require("../../Assets/BackIcon.png");
 
-const logoImage = require("../../Assets/ResalePhoneLogo.png");
+const logoImage = require("../../Assets/recellPhone.png");
 
 export default function AddressScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -354,11 +354,8 @@ export default function AddressScreen({ navigation }) {
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={
-          Platform.OS === "ios"
-            ? "padding"
-            : undefined
-        }
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={0}
       >
         {/* HEADER */}
 
@@ -367,9 +364,10 @@ export default function AddressScreen({ navigation }) {
             onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
-            <ChevronLeft
-              size={24}
-              color="#FFFFFF"
+            <Image
+              source={recellBackIcon}
+              style={styles.backIcon}
+              resizeMode="contain"
             />
 
             <Text style={styles.backButtonText}>
@@ -381,13 +379,11 @@ export default function AddressScreen({ navigation }) {
         {/* LOGO */}
 
         <View style={styles.logoSection}>
-          <View style={styles.logoCircle}>
-            <Image
-              source={logoImage}
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
-          </View>
+          <Image
+            source={logoImage}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
 
           <Text style={styles.title}>
             Address
@@ -401,20 +397,17 @@ export default function AddressScreen({ navigation }) {
 
         <ScrollView
           style={styles.formContainer}
-          // contentContainerStyle={styles.formContent}
-          // contentContainerStyle={[
-          //   styles.formContent,
-          //   {
-          //     paddingBottom: insets.bottom,
-          //   },
-          // ]}
+
           contentContainerStyle={[
             styles.formContent,
             {
-              paddingBottom: insets.bottom,
+              paddingBottom: insets.bottom + 100,
             },
           ]}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          nestedScrollEnabled={true}
+          showsVerticalScrollIndicator={true}
         >
 
           {addressLoading ? (
@@ -526,29 +519,11 @@ export default function AddressScreen({ navigation }) {
                         + Add New Address
                       </Text>
                     </TouchableOpacity>
-
-                    {/* <TouchableOpacity
-                      onPress={
-                        handleContinueWithSelectedAddress
-                      }
-                      style={styles.submitButton}
-                      activeOpacity={0.85}
-                    >
-                      <Text
-                        style={
-                          styles.submitButtonText
-                        }
-                      >
-                        Continue
-                      </Text>
-                    </TouchableOpacity> */}
                   </>
                 )}
-
-              {/* ================================= */}
+           
               {/* ADD NEW ADDRESS */}
-              {/* ================================= */}
-
+             
               {(showNewAddressForm ||
                 existingAddresses.length === 0) && (
                   <>
@@ -723,7 +698,7 @@ export default function AddressScreen({ navigation }) {
             style={[
               styles.bottomButtonContainer,
               {
-                paddingBottom: insets.bottom + 16,
+                paddingBottom: insets.bottom + 8,
               },
             ]}
           >
@@ -732,7 +707,7 @@ export default function AddressScreen({ navigation }) {
               style={styles.submitButton}
               activeOpacity={0.85}
             >
-              <Text style={styles.submitButtonText}>
+              <Text style={styles.submitButtonText} >
                 Continue
               </Text>
             </TouchableOpacity>
@@ -746,6 +721,10 @@ export default function AddressScreen({ navigation }) {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+  },
+  backIcon: {
+    width: 42,
+    height: 42,
   },
 
   header: {
@@ -774,28 +753,11 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
 
-  logoCircle: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 999,
-    padding: 16,
-    width: 80,
-    height: 80,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 6,
-  },
-
   logoImage: {
-    width: "100%",
-    height: "100%",
+    width: 130,
+    height: 150,
+    resizeMode: 'contain',
+    marginBottom: 15,
   },
 
   title: {
@@ -820,8 +782,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
 
     paddingHorizontal: 24,
-    paddingTop: 12,
-
     borderTopWidth: 1,
     borderTopColor: "#F3F4F6",
 
@@ -846,7 +806,7 @@ const styles = StyleSheet.create({
   formContent: {
     paddingHorizontal: 24,
     paddingTop: 24,
-    // paddingBottom: 30,
+    flexGrow: 1,
   },
 
   sectionTitle: {
@@ -1029,7 +989,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    // marginTop: 24,
+    marginTop: 12,
     elevation: 4,
   },
 
@@ -1043,8 +1003,8 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#9CA3AF",
     textAlign: "center",
-    marginTop: 16,
-    marginBottom: 24,
+    marginTop: 10,
+    marginBottom: 8,
     lineHeight: 18,
   },
   addressLoadingContainer: {
@@ -1055,5 +1015,9 @@ const styles = StyleSheet.create({
   addressLoadingText: {
     fontSize: 15,
     color: "#6B7280",
+  },
+
+  newAddressSubmitButton: {
+    marginTop: 24,
   },
 });

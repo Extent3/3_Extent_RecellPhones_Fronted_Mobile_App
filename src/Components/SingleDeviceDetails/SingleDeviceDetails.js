@@ -7,6 +7,7 @@ import { apiCall, Spinner } from '../Util/AxiosUtil';
 import {
     useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+const recellBackIcon = require("../../Assets/BackIcon.png");
 
 export default function SingleDeviceDetails({ navigation, route }) {
     const insets = useSafeAreaInsets();
@@ -200,7 +201,13 @@ export default function SingleDeviceDetails({ navigation, route }) {
                     }
                     style={styles.backButton}
                     hitSlop={{ top: 8, bottom: 8, left: 8, right: 8, }}>
-                    <ChevronLeft width={24} height={24} color="#374151" />
+                    <Image
+                        source={recellBackIcon}
+                        style={styles.backIcon}
+                        resizeMode="contain"
+                    />
+                    {/* const recellBackIcon = require("../../Assets/RecellBack.png"); */}
+                    {/* <ChevronLeft width={24} height={24} color="#374151" /> */}
                 </TouchableOpacity>
 
                 <Text style={styles.title}>
@@ -423,6 +430,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F9FAFB',
+    },
+    backIcon: {
+        width: 42,
+        height: 42,
     },
 
     header: {

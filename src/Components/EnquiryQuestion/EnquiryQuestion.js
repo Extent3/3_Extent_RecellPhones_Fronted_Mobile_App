@@ -6,12 +6,14 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  Image
 } from 'react-native';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets, } from 'react-native-safe-area-context';
 import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
+const recellBackIcon = require("../../Assets/BackIcon.png");
 
 
 
@@ -195,7 +197,12 @@ export default function EnquiryQuestion({ navigation, route }) {
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <ChevronLeft size={24} color="#333" />
+          <Image
+            source={recellBackIcon}
+            style={styles.backIcon}
+            resizeMode="contain"
+          />
+          {/* <ChevronLeft size={24} color="#333" /> */}
         </TouchableOpacity>
 
         <View style={{ flex: 1 }}>
@@ -278,12 +285,12 @@ export default function EnquiryQuestion({ navigation, route }) {
 
       <View
         // style={styles.bottomContainer}
-      style={[
-        styles.bottomContainer,
-        {
-          paddingBottom: insets.bottom + 16,
-        },
-      ]}
+        style={[
+          styles.bottomContainer,
+          {
+            paddingBottom: insets.bottom + 16,
+          },
+        ]}
 
       >
         <TouchableOpacity
@@ -306,6 +313,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F8F8',
+  },
+  backIcon: {
+    width: 42,
+    height: 42,
   },
 
   header: {

@@ -5,12 +5,14 @@ import {
     TouchableOpacity,
     ScrollView,
     StyleSheet,
+    Image
 } from "react-native";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import { ChevronRight } from "lucide-react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { apiCall, Spinner } from "../Util/AxiosUtil";
 import { API_URLS } from "../Util/AppConst";
+const recellBackIcon = require("../../Assets/BackIcon.png");
 
 export default function WarrantyScreen({ navigation, route }) {
 
@@ -99,7 +101,12 @@ export default function WarrantyScreen({ navigation, route }) {
                     onPress={() => navigation.navigate("EnquiryQuestion")}
                     style={styles.backButton}
                 >
-                    <ChevronLeft size={24} color="#374151" />
+                    <Image
+                        source={recellBackIcon}
+                        style={styles.backIcon}
+                        resizeMode="contain"
+                    />
+                    {/* <ChevronLeft size={24} color="#374151" /> */}
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Mobile Age</Text>
             </View>
@@ -172,11 +179,11 @@ export default function WarrantyScreen({ navigation, route }) {
 
             {/* ── Continue Button ── */}
             <View style={[
-                    styles.footer,
-                    {
-                        paddingBottom: 24 + insets.bottom,
-                    },
-                ]}
+                styles.footer,
+                {
+                    paddingBottom: 24 + insets.bottom,
+                },
+            ]}
             >
                 <TouchableOpacity
                     onPress={handleContinue}
@@ -214,6 +221,10 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         backgroundColor: "#F9FAFB",
+    },
+    backIcon: {
+        width: 42,
+        height: 42,
     },
     header: {
         backgroundColor: "#FFFFFF",

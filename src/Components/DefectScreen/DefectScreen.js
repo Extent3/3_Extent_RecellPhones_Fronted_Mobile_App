@@ -6,6 +6,7 @@ import {
     SafeAreaView,
     ScrollView,
     StyleSheet,
+    Image
 } from "react-native";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { apiCall, Spinner } from "../Util/AxiosUtil";
 import { API_URLS } from "../Util/AppConst";
 import { DEFECT_ICONS, DEFECT_DATA } from "../DefectScreen/DefectData";
+const recellBackIcon = require("../../Assets/BackIcon.png");
 
 export default function DefectScreen({ navigation, route }) {
     const insets = useSafeAreaInsets();
@@ -251,7 +253,12 @@ export default function DefectScreen({ navigation, route }) {
                     <View style={styles.headerRow}>
 
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                            <ChevronLeft size={28} color="#000" />
+                            {/* <ChevronLeft size={28} color="#000" /> */}
+                            <Image
+                                source={recellBackIcon}
+                                style={styles.backIcon}
+                                resizeMode="contain"
+                            />
                         </TouchableOpacity>
 
                         <View style={styles.headerTextContainer}>
@@ -336,6 +343,10 @@ const styles = StyleSheet.create({
     headerRow: {
         flexDirection: "row",
         alignItems: "center",
+    },
+    backIcon: {
+        width: 42,
+        height: 42,
     },
 
     backButton: {

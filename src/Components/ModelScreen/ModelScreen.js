@@ -7,13 +7,12 @@ import {
     StyleSheet,
     SafeAreaView,
     StatusBar,
+    Image
 } from 'react-native';
 
 import Card from '../CustomComponent/Card';
 import BottomNav from '../BottomNav/BottomNav';
-
-import { ChevronLeft } from 'lucide-react-native';
-
+const recellBackIcon = require("../../Assets/BackIcon.png");
 import CustomSearchInputDropdown from '../CustomComponent/CustomSearchInputDropdown';
 
 import { API_URLS } from '../Util/AppConst';
@@ -128,13 +127,13 @@ export default function ModelScreen({ navigation, route }) {
     const handleModelClick = model => {
         setSearch('');
 
-       
+
         navigation.navigate(
             'DeviceDetails',
             {
                 model: model?.name?.name || model?.name,
                 modelId: model?._id,
-                modelImage: model?.thumbnailBase64 ,
+                modelImage: model?.thumbnailBase64,
                 brand: brand,
             }
         );
@@ -144,7 +143,7 @@ export default function ModelScreen({ navigation, route }) {
         return (
             <Card
                 item={item}
-                image={ item?.thumbnailBase64}
+                image={item?.thumbnailBase64}
                 label={item?.name?.name || item?.name}
                 onPress={() =>
                     handleModelClick(item)
@@ -178,10 +177,12 @@ export default function ModelScreen({ navigation, route }) {
                             right: 8,
                         }}
                     >
-                        <ChevronLeft
-                            size={24}
-                            color="#374151"
+                        <Image
+                            source={recellBackIcon}
+                            style={styles.backIcon}
+                            resizeMode="contain"
                         />
+
                     </TouchableOpacity>
 
                     <Text style={styles.title}>
@@ -241,6 +242,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F9FAFB',
+    },
+    backIcon: {
+        width: 42,
+        height: 42,
     },
     header: {
         backgroundColor: '#FFFFFF',

@@ -14,7 +14,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Smartphone, TrendingUp, Zap, UserCircle } from 'lucide-react-native';
 
 
-const logoImage = require('../../Assets/ResalePhoneLogo.png');
+const logoImage = require('../../Assets/recellPhone.png');
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const { width } = Dimensions.get('window');
 
 import {
@@ -91,6 +92,7 @@ const offers = [
 export default function HomeScreen({ navigation }) {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(false);
+  const insets = useSafeAreaInsets();
   useEffect(() => {
     getBrands();
   }, []);
@@ -137,7 +139,17 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.mainContainer}>
       {loading && <Spinner />}
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.container}
+        contentContainerStyle={[
+          styles.contentContainer,
+          {
+
+            paddingBottom: 24 + insets.bottom,
+          },
+        ]}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
+        
         {/* Green Header with Gradient */}
         <LinearGradient
           colors={['#0D8A4F', '#0A6E3F']}
@@ -148,16 +160,16 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.topBar}>
             {/* Left Side */}
             <View style={styles.logoContainer}>
-              <View style={styles.logoCircle}>
-                <Image
-                  source={logoImage}
-                  style={styles.logoImage}
-                  resizeMode="contain"
-                />
-              </View>
+
+              <Image
+                source={logoImage}
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
+
 
               <View style={styles.logoTextContainer}>
-                <Text style={styles.logoTitle}>3_EXTENT</Text>
+                <Text style={styles.logoTitle}>RecellPhones</Text>
                 <Text style={styles.logoSubtitle}>
                   Buy & Sell Used Devices
                 </Text>
@@ -165,9 +177,9 @@ export default function HomeScreen({ navigation }) {
             </View>
 
             {/* Right Side */}
-            <TouchableOpacity 
-            style={styles.avatarCircle}
-             onPress={() => navigation.navigate('Profile')}
+            <TouchableOpacity
+              style={styles.avatarCircle}
+              onPress={() => navigation.navigate('Profile')}
             >
               <UserCircle size={28} color="#FFFFFF" />
             </TouchableOpacity>
@@ -335,18 +347,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  logoCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // logoCircle: {
+  //   width: 60,
+  //   height: 60,
+  //   borderRadius: 30,
+  //   backgroundColor: '#FFFFFF',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
 
+  // logoImage: {
+  //   width: 42,
+  //   height: 42,
+  // },
   logoImage: {
-    width: 42,
-    height: 42,
+    width: 60,
+    height: 70,
+    resizeMode: 'contain',
   },
 
   logoTextContainer: {
@@ -576,40 +593,4 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 
-  //   brandsGrid: {
-  //   flexDirection: 'row',
-  //   flexWrap: 'wrap',
-  // },
-  // brandsCard: {
-  //   backgroundColor: '#fff',
-  //   borderRadius: 16,
-  //   padding: 8,
-  //   shadowColor: '#000',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 2,
-  //   },
-  //   shadowOpacity: 0.08,
-  //   shadowRadius: 6,
-  //   elevation: 3,
-  // // },
-  // brandsCard: {
-  //   backgroundColor: '#fff',
-  //   borderRadius: 16,
-  //   padding: 16,
-  //   shadowColor: '#000',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 2,
-  //   },
-  //   shadowOpacity: 0.08,
-  //   shadowRadius: 6,
-  //   elevation: 3,
-  // },
-
-  // brandsGrid: {
-  //   flexDirection: 'row',
-  //   flexWrap: 'wrap',
-  //   justifyContent: 'space-between',
-  // },
 });

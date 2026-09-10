@@ -7,7 +7,10 @@ import {
   StyleSheet,
   SafeAreaView,
   ToastAndroid,
-   StatusBar,
+  StatusBar,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +19,7 @@ import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
 import InputComponent from '../CustomComponent/InputComponent';
 
-const logoImage = require('../../Assets/recell.png');
+const logoImage = require('../../Assets/recellPhone.png');
 
 export default function LoginScreen({ navigation }) {
   const [phoneNumber, setphoneNumber] = useState('');
@@ -78,73 +81,75 @@ export default function LoginScreen({ navigation }) {
       />
 
       <SafeAreaView style={styles.flex}>
-        {loading && <Spinner />}
-
-        {/* TOP LOGO SECTION */}
-        <View style={styles.logoSection}>
-          <View style={styles.logoCircle}>
-            <Image source={logoImage} style={styles.logoImage} />
-          </View>
-
-          <Text style={styles.title}>3_EXTENT</Text>
-          <Text style={styles.subtitle}>Buy & Sell Used Devices</Text>
-          <Text style={styles.description}>
-            Get best value for your old devices with instant price quotes
-          </Text>
-        </View>
-
-        {/* FORM SECTION */}
-        <View
-          // style={styles.formSection}
-          //   style={[
-          //     styles.formSection,
-          //     {
-          //       paddingBottom: 24 + insets.bottom,
-          //     },
-          //   ]}
-          // >
-          style={[
-            styles.formSection,
-            {
-              paddingBottom: insets.bottom + 24,
-            },
-          ]}
+        <KeyboardAvoidingView
+          style={styles.keyboardContainer}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={0}
         >
-          <Text style={styles.welcomeText}>Welcome Back!</Text>
-          <Text style={styles.signInText}>Sign in to continue</Text>
-
-
-          <InputComponent
-            label="Phone Number"
-            value={phoneNumber}
-            onChangeText={(text) => {
-              setphoneNumber(text);
-              setError('');
-            }}
-            placeholder="Enter mobile number"
-            // keyboardType="phone-pad"
-            keyboardType="numeric"
-            maxLength={10}
-            prefix="+91"
-            error={error}
-          />
-
-          {/* LOGIN BUTTON */}
-          <TouchableOpacity
-            style={[
-              styles.loginButton,
-              phoneNumber.length === 0 && { opacity: 0.5 }
-            ]}
-            onPress={handleLogin}
-            disabled={phoneNumber.length === 0}
+          {loading && <Spinner />}
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
-            <Text style={styles.loginButtonText}>Continue</Text>
-          </TouchableOpacity>
-          {/* TERMS */}
-          <Text style={styles.termsText}>
-            By continuing you agree to Terms & Privacy Policy
-          </Text>
-        </View>
+
+            {/* TOP LOGO SECTION */}
+            <View style={styles.logoSection}>
+              <Image source={logoImage} style={styles.logoImage} />
+              <Text style={styles.title}>RecellPhones</Text>
+              <Text style={styles.subtitle}>Buy & Sell Used Devices</Text>
+              <Text style={styles.description}>
+                Get best value for your old devices with instant price quotes
+              </Text>
+            </View>
+
+            {/* FORM SECTION */}
+            <View
+              style={[
+                styles.formSection,
+                {
+                  paddingBottom: insets.bottom + 24,
+                },
+              ]}
+            >
+              <Text style={styles.welcomeText}>Welcome Back!</Text>
+              <Text style={styles.signInText}>Sign in to continue</Text>
+
+
+              <InputComponent
+                label="Phone Number"
+                value={phoneNumber}
+                onChangeText={(text) => {
+                  setphoneNumber(text);
+                  setError('');
+                }}
+                placeholder="Enter mobile number"
+                // keyboardType="phone-pad"
+                keyboardType="numeric"
+                maxLength={10}
+                prefix="+91"
+                error={error}
+              />
+
+              {/* LOGIN BUTTON */}
+              <TouchableOpacity
+                style={[
+                  styles.loginButton,
+                  phoneNumber.length === 0 && { opacity: 0.5 }
+                ]}
+                onPress={handleLogin}
+                disabled={phoneNumber.length === 0}
+              >
+                <Text style={styles.loginButtonText}>Continue</Text>
+              </TouchableOpacity>
+              {/* TERMS */}
+              <Text style={styles.termsText}>
+                By continuing you agree to Terms & Privacy Policy
+              </Text>
+            </View>
+          </ScrollView>
+
+        </KeyboardAvoidingView>
 
       </SafeAreaView>
     </LinearGradient >
@@ -155,6 +160,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  keyboardContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
 
   flex: {
     flex: 1,
@@ -162,27 +174,20 @@ const styles = StyleSheet.create({
   },
 
   /* LOGO SECTION */
+
   logoSection: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-  },
-
-  logoCircle: {
-    width: 120,
-    height: 120,
-    backgroundColor: '#fff',
-    borderRadius: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
+    paddingBottom: 10,
   },
 
   logoImage: {
-    width: 110,
-    height: 110,
+    width: 130,
+    height: 150,
     resizeMode: 'contain',
+    marginBottom: 14,
   },
 
   title: {

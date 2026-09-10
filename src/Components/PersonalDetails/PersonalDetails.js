@@ -10,12 +10,13 @@ import {
     Platform,
     ToastAndroid,
 } from "react-native";
-import { ChevronLeft } from 'lucide-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
 import InputComponent from "../CustomComponent/InputComponent";
-const logoImage = require('../../Assets/ResalePhoneLogo.png');
+const logoImage = require('../../Assets/recellPhone.png');
+const recellBackIcon = require("../../Assets/BackIcon.png");
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function PersonalDetails({ navigation, route }) {
     const { userId } = route?.params;
@@ -28,6 +29,8 @@ export default function PersonalDetails({ navigation, route }) {
         email: "",
     });
     const [errors, setErrors] = useState({});
+    const insets = useSafeAreaInsets();
+
 
     const updatePersonalDetailsCallback = response => {
         console.log('Personal Details Response:', response);
@@ -111,7 +114,8 @@ export default function PersonalDetails({ navigation, route }) {
             {loading && <Spinner />}
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={Platform.OS === "ios" ? "padding" : undefined}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={0}
             >
                 {/* Header with Back Button */}
                 <View style={styles.header}>
@@ -119,20 +123,23 @@ export default function PersonalDetails({ navigation, route }) {
                         onPress={() => navigation.navigate("Login")}
                         style={styles.backButton}
                     >
-                        <ChevronLeft size={24} color="#FFFFFF" />
+                        <Image
+                            source={recellBackIcon}
+                            style={styles.backIcon}
+                            resizeMode="contain"
+                        />
+
                         <Text style={styles.backButtonText}>Back</Text>
                     </TouchableOpacity>
                 </View>
 
                 {/* Logo Section */}
                 <View style={styles.logoSection}>
-                    <View style={styles.logoCircle}>
-                        <Image
-                            source={logoImage}
-                            style={styles.logoImage}
-                            resizeMode="contain"
-                        />
-                    </View>
+                    <Image
+                        source={logoImage}
+                        style={styles.logoImage}
+                        resizeMode="contain"
+                    />
 
                     <Text style={styles.title}>Personal Details</Text>
                     <Text style={styles.subtitle}>
@@ -143,9 +150,16 @@ export default function PersonalDetails({ navigation, route }) {
                 {/* Form Section */}
                 <ScrollView
                     style={styles.formContainer}
-                    contentContainerStyle={styles.formContent}
+
+                    contentContainerStyle={[
+                        styles.formContent,
+                        {
+                            paddingBottom: insets.bottom + 24,
+                        },
+                    ]}
                     keyboardShouldPersistTaps="handled"
-                >
+                    keyboardDismissMode="on-drag"
+                    showsVerticalScrollIndicator={false}  >
 
                     <View style={styles.field}>
                         <InputComponent
@@ -215,27 +229,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         paddingHorizontal: 24,
-        paddingTop: 16,
         paddingBottom: 24,
     },
-    logoCircle: {
-        backgroundColor: "#FFFFFF",
-        borderRadius: 999,
-        padding: 16,
-        width: 80,
-        height: 80,
-        alignItems: "center",
-        justifyContent: "center",
-        marginBottom: 16,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.25,
-        shadowRadius: 12,
-        elevation: 6,
-    },
+
     logoImage: {
-        width: "100%",
-        height: "100%",
+        width: 120,
+        height: 150,
     },
     title: {
         color: "#FFFFFF",
@@ -286,7 +285,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 52,
+        marginTop: 30,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
@@ -305,5 +304,13 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginBottom: 24,
         lineHeight: 18,
+    },
+    backIcon: {
+        width: 42,
+        height: 42,
+    },
+    formContent: {
+        paddingHorizontal: 24,
+        paddingTop: 24,
     },
 });

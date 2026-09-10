@@ -7,13 +7,12 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Image
 } from 'react-native';
 
 import Card from '../CustomComponent/Card';
 import BottomNav from '../BottomNav/BottomNav';
-
-import { ChevronLeft } from 'lucide-react-native';
-
+const recellBackIcon = require("../../Assets/BackIcon.png");
 import CustomSearchInputDropdown from '../CustomComponent/CustomSearchInputDropdown';
 
 import {
@@ -40,7 +39,7 @@ import {
 } from './BrandIcons';
 
 import { apiCall, Spinner } from '../Util/AxiosUtil';
-import { API_URLS} from '../Util/AppConst';
+import { API_URLS } from '../Util/AppConst';
 const BRAND_LOGOS = {
   APPLE: AppleLogo,
   SAMSUNG: SamsungLogo,
@@ -88,11 +87,11 @@ export default function BrandScreen({ navigation }) {
   const getBrandsCallback = response => {
     setLoading(false);
     if (response?.status === 200) {
-      const brandList = response?.data ;
+      const brandList = response?.data;
       const brandData =
         brandList.map(item => ({
           ...item,
-          Logo: BRAND_LOGOS[ item?.name?.toUpperCase()],
+          Logo: BRAND_LOGOS[item?.name?.toUpperCase()],
         }));
       setBrands(brandData);
     } else {
@@ -110,7 +109,7 @@ export default function BrandScreen({ navigation }) {
 
   const getModelsCallback = response => {
     if (response?.status === 200) {
-      setModels( response?.data );
+      setModels(response?.data);
     } else {
       setModels([]);
     }
@@ -125,7 +124,7 @@ export default function BrandScreen({ navigation }) {
     navigation.navigate(
       'DeviceDetails',
       {
-        model: model?.name?.name || model?.name ,
+        model: model?.name?.name || model?.name,
         modelId: model?._id,
         modelImage: model?.thumbnailBase64 || model?.image,
       }
@@ -167,8 +166,14 @@ export default function BrandScreen({ navigation }) {
               navigation.navigate('Home')
             }
             style={styles.backButton}
+
           >
-            <ChevronLeft size={24} color="#374151" />
+            <Image
+              source={recellBackIcon}
+              style={styles.backIcon}
+              resizeMode="contain"
+            />
+           
           </TouchableOpacity>
 
           <Text style={styles.title}>
@@ -182,7 +187,7 @@ export default function BrandScreen({ navigation }) {
           value={search}
           onChange={handleSearchChange}
           onSelect={handleModelClick}
-          getOptionLabel={item =>item?.name?.name || item?.name 
+          getOptionLabel={item => item?.name?.name || item?.name
           }
         />
       </View>
@@ -214,7 +219,7 @@ export default function BrandScreen({ navigation }) {
         showsVerticalScrollIndicator={false}
       />
 
-      <BottomNav currentScreen="Brand"/>
+      <BottomNav currentScreen="Brand" />
     </SafeAreaView>
 
   );
@@ -300,6 +305,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 32,
 
+  },
+  backIcon: {
+    width: 42,
+    height: 42,
   },
 
 });

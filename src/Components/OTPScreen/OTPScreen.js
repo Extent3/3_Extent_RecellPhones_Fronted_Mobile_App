@@ -8,11 +8,14 @@ import {
   StyleSheet,
   SafeAreaView,
   ToastAndroid,
+  KeyboardAvoidingView,
+  ScrollView
 } from 'react-native';
 import { apiCall, Spinner } from '../Util/AxiosUtil';
 import { API_URLS } from '../Util/AppConst';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const logoImage = require('../../Assets/recell.png');
+const logoImage = require('../../Assets/recellPhone.png');
+const recellBackIcon = require("../../Assets/BackIcon.png");
 
 export default function OTPScreen({ navigation, route }) {
   const { phoneNumber, } = route.params;
@@ -118,10 +121,7 @@ export default function OTPScreen({ navigation, route }) {
   const handleVerify = () => {
     const code = otp.join('');
     if (code.length !== 6) {
-      if (code.length !== 6) {
-        alert('Enter 6 digit OTP');
-        return;
-      }
+      alert('Enter 6 digit OTP');
       return;
     }
 
@@ -186,71 +186,91 @@ export default function OTPScreen({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       {loading && <Spinner />}
-
-      {/* HEADER */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* LOGO */}
-      <View style={styles.logoSection}>
-        <View style={styles.logoCircle}>
-          <Image source={logoImage} style={styles.logo} />
-        </View>
-
-        <Text style={styles.title}>Enter OTP</Text>
-        <Text style={styles.subtitle}>
-          We've sent a 6-digit code to {phoneNumber}
-        </Text>
-      </View>
-
-      {/* OTP BOXES */}
-      <View style={styles.otpContainer}>
-        {otp.map((digit, index) => (
-          <TextInput
-            key={index}
-            ref={el => (inputRefs.current[index] = el)}
-            value={digit}
-            onChangeText={value => handleChange(value, index)}
-            onKeyPress={e => handleKeyPress(e, index)}
-            keyboardType="numeric"
-            maxLength={1}
-            style={styles.otpBox}
-          />
-        ))}
-      </View>
-
-      {/* TIMER */}
-      <View style={styles.timerBox}>
-        {timer > 0 ? (
-          <Text style={styles.timerText}>
-            Resend OTP in {timer}s
-          </Text>
-        ) : (
-          <TouchableOpacity onPress={handleResend}>
-            <Text style={styles.resendText}>Resend OTP</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      {/* VERIFY BUTTON */}
-      <TouchableOpacity
-        style={[
-          styles.button,
-          otp.some(d => d === '') && { opacity: 0.5 }
-        ]}
-        disabled={otp.some(d => d === '')}
-        onPress={handleVerify}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0}
       >
-        <Text style={styles.buttonText}>Verify & Continue</Text>
-      </TouchableOpacity>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
+        >
 
-      {/* HELP TEXT */}
-      <Text style={styles.helpText}>
-        Didn't receive OTP? Check SMS or resend again
-      </Text>
+          {/* HEADER */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+
+              <Image
+                source={recellBackIcon}
+                style={styles.backIcon}
+                resizeMode="contain"
+              />
+              <Text style={styles.backButtonText}>
+                Back
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+
+          {/* LOGO */}
+          <View style={styles.logoSection}>
+            <Image source={logoImage} style={styles.logo} />
+            <Text style={styles.title}>Enter OTP</Text>
+            <Text style={styles.subtitle}>
+              We've sent a 6-digit code to {phoneNumber}
+            </Text>
+          </View>
+
+          {/* OTP BOXES */}
+          <View style={styles.otpContainer}>
+            {otp.map((digit, index) => (
+              <TextInput
+                key={index}
+                ref={el => (inputRefs.current[index] = el)}
+                value={digit}
+                onChangeText={value => handleChange(value, index)}
+                onKeyPress={e => handleKeyPress(e, index)}
+                keyboardType="numeric"
+                maxLength={1}
+                style={styles.otpBox}
+              />
+            ))}
+          </View>
+
+          {/* TIMER */}
+          <View style={styles.timerBox}>
+            {timer > 0 ? (
+              <Text style={styles.timerText}>
+                Resend OTP in {timer}s
+              </Text>
+            ) : (
+              <TouchableOpacity onPress={handleResend}>
+                <Text style={styles.resendText}>Resend OTP</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* VERIFY BUTTON */}
+          <TouchableOpacity
+            style={[
+              styles.button,
+              otp.some(d => d === '') && { opacity: 0.5 }
+            ]}
+            disabled={otp.some(d => d === '')}
+            onPress={handleVerify}
+          >
+            <Text style={styles.buttonText}>Verify & Continue</Text>
+          </TouchableOpacity>
+
+          {/* HELP TEXT */}
+          <Text style={styles.helpText}>
+            Didn't receive OTP? Check SMS or resend again
+          </Text>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
     </SafeAreaView>
   );
@@ -261,37 +281,43 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0D8A4F',
   },
-
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 24,
+  },
 
   header: {
-    paddingHorizontal: 20,
-    paddingTop: 45,
-    paddingBottom: 10,
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 16,
   },
-  backText: {
-    color: '#fff',
+
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  backButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "500",
     fontSize: 16,
   },
+  // backText: {
+  //   color: '#fff',
+  //   fontSize: 16,
+  // },
 
   logoSection: {
     alignItems: 'center',
     marginTop: 20,
   },
 
-  logoCircle: {
-    width: 90,
-    height: 90,
-    backgroundColor: '#fff',
-    borderRadius: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-
   logo: {
-    width: 85,
-    height: 85,
+    width: 120,
+    height: 100,
     resizeMode: 'contain',
+    marginBottom: 15,
   },
 
   title: {
@@ -357,5 +383,9 @@ const styles = StyleSheet.create({
     color: '#E5E7EB',
     fontSize: 12,
     marginTop: 10,
+  },
+  backIcon: {
+    width: 42,
+    height: 42,
   },
 });
